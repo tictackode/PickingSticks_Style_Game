@@ -25,7 +25,7 @@ void init()
 	set_color_depth(depth);
 	res = set_gfx_mode(GFX_AUTODETECT_WINDOWED, SCREEN_X, SCREEN_Y, 0, 0);
 	if (res != 0) 
-    {
+        {
 		allegro_message(allegro_error);
 		exit(-1);
 	}
@@ -60,7 +60,7 @@ void initStickPosition()
 
 void printPaneltoBuffer()
 {
-    //imprime informações do painel lateral - Print information
+    //imprime informaÃ§Ãµes do painel lateral - Print information
     textprintf_ex(buffer, font, 0,0, makecol(0, 0, 255),-1,"Move player: W,A,S,D or arrow keys");
     textprintf_ex(buffer, font, 0,10, makecol(0, 0, 255),-1,"Caught wooden sticks: %hu",player1.colided);
 }
@@ -196,7 +196,7 @@ void controls()
 
 int main() 
 {
-	init();
+    init();
     	
     //sets the size of the console window
     set_window_title("C language + Allegro4 Picking Sticks style game");
@@ -213,7 +213,7 @@ int main()
     //sets the first random position of the wooden stick
     initStickPosition();
     
-	while (!key[KEY_ESC]) 
+    while (!key[KEY_ESC]) 
     {
         
         drawScreen();
@@ -222,8 +222,8 @@ int main()
 
     }
 
-	deinit();
-	return 0;
+    deinit();
+    return 0;
 }
 END_OF_MAIN();
 
