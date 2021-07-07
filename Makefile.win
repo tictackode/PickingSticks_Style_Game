@@ -5,8 +5,8 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = main.o $(RES)
-LINKOBJ  = main.o $(RES)
+OBJ  = ../../Tictackode---tictacShooter/main.o $(RES)
+LINKOBJ  = ../../Tictackode---tictacShooter/main.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib" -mwindows -lalleg_s -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lole32 -ldinput -lddraw -ldxguid -lwinmm -ldsound 
 INCS =  -I"C:/Dev-Cpp/include" 
 CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
@@ -26,5 +26,5 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CPP) $(LINKOBJ) -o "Tictackode---Picking_Sticks_Allegro4.exe" $(LIBS)
 
-main.o: main.cpp
-	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+../../Tictackode---tictacShooter/main.o: ../../Tictackode---tictacShooter/main.cpp
+	$(CPP) -c ../../Tictackode---tictacShooter/main.cpp -o ../../Tictackode---tictacShooter/main.o $(CXXFLAGS)

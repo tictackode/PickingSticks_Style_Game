@@ -7,44 +7,13 @@
 
 #include <time.h>
 #include "MapObject.h"
+#include "GameScreen.h"
 
-unsigned short SCREEN_X=BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-unsigned short SCREEN_Y=BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
 
-BITMAP* buffer;
-
-void init();
-void deinit();
-
-void init() 
-{
-	int depth, res;
-	allegro_init();
-	depth = desktop_color_depth();
-	if (depth == 0) depth = 32;
-	set_color_depth(depth);
-	res = set_gfx_mode(GFX_AUTODETECT_WINDOWED, SCREEN_X, SCREEN_Y, 0, 0);
-	if (res != 0) 
-        {
-		allegro_message(allegro_error);
-		exit(-1);
-	}
-
-	install_keyboard();
-	install_mouse();
-	install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT,NULL);
-	install_timer();
-	
-}
-
-void deinit() {
-	clear_keybuf();
-	/* add other deinitializations here */
-}
 
 void initImages()
 {
-     buffer=create_bitmap(SCREEN_X,SCREEN_Y);
+     gameScreen.buffer=create_bitmap(gameScreen.SCREEN_X,gameScreen.SCREEN_Y);
      
      player1.loadImage("images/player.bmp");
      grass.loadImage("images/grass.bmp");
@@ -58,40 +27,6 @@ void initStickPosition()
      wooden_stick.y=rand()%NUMBER_OF_BLOCKS;
 }
 
-void printPaneltoBuffer()
-{
-    //imprime informações do painel lateral - Print information
-    textprintf_ex(buffer, font, 0,0, makecol(0, 0, 255),-1,"Move player: W,A,S,D or arrow keys");
-    textprintf_ex(buffer, font, 0,10, makecol(0, 0, 255),-1,"Caught wooden sticks: %hu",player1.colided);
-}
-
-void drawScreen()
-{
-    //draws the grass field 
-    for(int i=0;i<NUMBER_OF_BLOCKS;i++)
-    {
-         for(int j=0;j<NUMBER_OF_BLOCKS;j++)
-         {
-                blit(grass.image, buffer, 0, 0, (i * BLOCK_SIDE_SIZE), (j * BLOCK_SIDE_SIZE), (i * BLOCK_SIDE_SIZE) + BLOCK_SIDE_SIZE, (j * BLOCK_SIDE_SIZE) + BLOCK_SIDE_SIZE);
-         }  
-    }
-    
-    //Player 1 label  
-    textprintf_ex(buffer, font, (player1.x * BLOCK_SIDE_SIZE),(player1.y * BLOCK_SIDE_SIZE-20), makecol(0, 0,255 ),-1,"Player 1");
-          
-    //Printing the player on screen
-    blit(player1.image, buffer, 0, 0, (player1.x * BLOCK_SIDE_SIZE), (player1.y * BLOCK_SIDE_SIZE), (player1.x * BLOCK_SIDE_SIZE) + BLOCK_SIDE_SIZE, (player1.y * BLOCK_SIDE_SIZE) + BLOCK_SIDE_SIZE);
-    //stretch_blit(player1.image, buffer, 0, 0, 40, 40, player1.x * BLOCK_SIDE_SIZE, player1.y * BLOCK_SIDE_SIZE, (player1.x * BLOCK_SIDE_SIZE)+BLOCK_SIDE_SIZE, (player1.y * BLOCK_SIDE_SIZE)+BLOCK_SIDE_SIZE);
-    
-    //printing the wodden stick
-    blit(wooden_stick.image, buffer, 0, 0, (wooden_stick.x * BLOCK_SIDE_SIZE), (wooden_stick.y * BLOCK_SIDE_SIZE), (wooden_stick.x * BLOCK_SIDE_SIZE) + BLOCK_SIDE_SIZE, (wooden_stick.y * BLOCK_SIDE_SIZE) + BLOCK_SIDE_SIZE);
-    
-    //print game information on screen
-    printPaneltoBuffer();  
-    
-    //draws buffer on the screen
-    blit(buffer, screen, 0, 0, 0, 0, SCREEN_X, SCREEN_Y);
-}
 
 void controls()
 {
@@ -105,14 +40,14 @@ void controls()
     }
     else if(key[KEY_S]||key[KEY_DOWN]) 
     {
-        if(player1.y<NUMBER_OF_BLOCKS-1)
+        if(player1.y<gameScreen.NUMBER_OF_BLOCKS-1)
         {
              player1.y++;  
         }
     }
     else if(key[KEY_D]||key[KEY_RIGHT]) 
     {
-        if(player1.x<NUMBER_OF_BLOCKS-1)
+        if(player1.x<gameScreen.NUMBER_OF_BLOCKS-1)
         {
             player1.x++;
         }
@@ -127,56 +62,56 @@ void controls()
     else if(key[KEY_Z])
     {
         //increase zoom (experimental)
-        BLOCK_SIDE_SIZE++;
-        SCREEN_X = BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-        SCREEN_Y = BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-        buffer = create_bitmap(SCREEN_X,SCREEN_Y);
-        set_gfx_mode(GFX_AUTODETECT_WINDOWED, SCREEN_X, SCREEN_Y, 0, 0);
+        gameScreen.BLOCK_SIDE_SIZE++;
+        gameScreen.SCREEN_X = gameScreen.BLOCK_SIDE_SIZE * gameScreen.NUMBER_OF_BLOCKS;
+        gameScreen.SCREEN_Y = gameScreen.BLOCK_SIDE_SIZE * gameScreen.NUMBER_OF_BLOCKS;
+        gameScreen.buffer = create_bitmap(gameScreen.SCREEN_X,gameScreen.SCREEN_Y);
+        set_gfx_mode(GFX_AUTODETECT_WINDOWED, gameScreen.SCREEN_X, gameScreen.SCREEN_Y, 0, 0);
         
-        drawScreen();
+        gameScreen.drawScreen();
 
     }
     else if(key[KEY_X])
     { 
          //decrease zoom (experimental)
-         BLOCK_SIDE_SIZE--;
-         SCREEN_X = BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-         SCREEN_Y = BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-         buffer = create_bitmap(SCREEN_X, SCREEN_Y);
-         set_gfx_mode(GFX_AUTODETECT_WINDOWED, SCREEN_X, SCREEN_Y, 0, 0);
+         gameScreen.BLOCK_SIDE_SIZE--;
+         gameScreen.SCREEN_X = gameScreen.BLOCK_SIDE_SIZE * gameScreen.NUMBER_OF_BLOCKS;
+         gameScreen.SCREEN_Y = gameScreen.BLOCK_SIDE_SIZE * gameScreen.NUMBER_OF_BLOCKS;
+         gameScreen.buffer = create_bitmap(gameScreen.SCREEN_X, gameScreen.SCREEN_Y);
+         set_gfx_mode(GFX_AUTODETECT_WINDOWED, gameScreen.SCREEN_X, gameScreen.SCREEN_Y, 0, 0);
 
-         drawScreen();
+         gameScreen.drawScreen();
 
     }
      else if(key[KEY_N])
     {
           //increase map size
-          NUMBER_OF_BLOCKS++;
-          SCREEN_X = BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-          SCREEN_Y = BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-          buffer = create_bitmap(SCREEN_X, SCREEN_Y);
-          set_gfx_mode(GFX_AUTODETECT_WINDOWED, SCREEN_X, SCREEN_Y, 0, 0);
+          gameScreen.NUMBER_OF_BLOCKS++;
+          gameScreen.SCREEN_X = gameScreen.BLOCK_SIDE_SIZE * gameScreen.NUMBER_OF_BLOCKS;
+          gameScreen.SCREEN_Y = gameScreen.BLOCK_SIDE_SIZE * gameScreen.NUMBER_OF_BLOCKS;
+          gameScreen.buffer = create_bitmap(gameScreen.SCREEN_X, gameScreen.SCREEN_Y);
+          set_gfx_mode(GFX_AUTODETECT_WINDOWED, gameScreen.SCREEN_X, gameScreen.SCREEN_Y, 0, 0);
           
           player1.x=1;
           player1.y=1;
           initStickPosition();
-          drawScreen();  
+          gameScreen.drawScreen(); 
           
     
     }
     else if(key[KEY_M])
     {
          //reduce map size
-         NUMBER_OF_BLOCKS--;
-         SCREEN_X = BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-         SCREEN_Y = BLOCK_SIDE_SIZE * NUMBER_OF_BLOCKS;
-         buffer = create_bitmap(SCREEN_X, SCREEN_Y);
-         set_gfx_mode(GFX_AUTODETECT_WINDOWED, SCREEN_X, SCREEN_Y, 0, 0);
+         gameScreen.NUMBER_OF_BLOCKS--;
+         gameScreen.SCREEN_X = gameScreen.BLOCK_SIDE_SIZE * gameScreen.NUMBER_OF_BLOCKS;
+         gameScreen.SCREEN_Y = gameScreen.BLOCK_SIDE_SIZE * gameScreen.NUMBER_OF_BLOCKS;
+         gameScreen.buffer = create_bitmap(gameScreen.SCREEN_X, gameScreen.SCREEN_Y);
+         set_gfx_mode(GFX_AUTODETECT_WINDOWED, gameScreen.SCREEN_X, gameScreen.SCREEN_Y, 0, 0);
 
          player1.x=1;
          player1.y=1;
          initStickPosition();
-         drawScreen();
+         gameScreen.drawScreen();
          
     }
     
@@ -196,10 +131,10 @@ void controls()
 
 int main() 
 {
-    init();
+	gameScreen.init();
     	
     //sets the size of the console window
-    set_window_title("C language + Allegro4 Picking Sticks style game");
+    set_window_title("tictacShooter >>> an opensource spaceship shooter game");
     
     //to generate real random numbers
     srand(time(0));  
@@ -213,17 +148,17 @@ int main()
     //sets the first random position of the wooden stick
     initStickPosition();
     
-    while (!key[KEY_ESC]) 
+	while (!key[KEY_ESC]) 
     {
         
-        drawScreen();
+        gameScreen.drawScreen();
         controls();
         player1.checkCollision(wooden_stick);
 
     }
 
-    deinit();
-    return 0;
+	gameScreen.deinit();
+	return 0;
 }
 END_OF_MAIN();
 
