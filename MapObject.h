@@ -8,9 +8,6 @@
 #include <allegro.h>
 #include "Audio.h"
 
-unsigned short NUMBER_OF_BLOCKS=20;
-unsigned short BLOCK_SIDE_SIZE=40;
-
 class MapObject
 {
     public:  
